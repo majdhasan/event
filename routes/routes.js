@@ -19,7 +19,7 @@ router.use((req, res, next) => {
   next();
 });
 
-router.route('/user').get((req, res) => {
+router.route('/home').get((req, res) => {
   if (req.isAuthenticated()) {
     Event.find((err, results) => {
       if (err) {
@@ -37,33 +37,41 @@ router
   .route('/event')
   .get((req, res) => {})
   .post((req, res) => {
-    let newEvent = new Event({
-      title: req.body.title,
-      body: req.body.description,
-      //   creator: req.body.userId,
-      date: new Date(),
-      comments: [],
-      guests: [],
-    });
-    newEvent.save((err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log('New Event has been created');
-        res.redirect('/user');
-      }
-    });
+    if (req.isAuthenticated()) {
+      let newEvent = new Event({
+        title: req.body.title,
+        body: req.body.description,
+        //   creator: req.body.userId,
+        date: new Date(),
+        comments: [],
+        guests: [],
+      });
+      newEvent.save((err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('New Event has been created');
+          res.redirect('/home');
+        }
+      });
+    } else {
+      res.redirect('/login');
+    }
   });
 
 router.route('/event/new').get((req, res) => {
-  res.render('newEvent');
+  if (req.isAuthenticated()) {
+    res.render('newEvent');
+  } else {
+    res.redirect('/login');
+  }
+  
 });
 
 router
   .route('/event/:id')
   .get((req, res) => {})
   .post((req, res) => {});
-
 
 router
   .route('/login')
@@ -80,7 +88,7 @@ router
         console.log(err);
       } else {
         passport.authenticate('local')(req, res, (err, scc) => {
-          err ? console.log(err) : res.redirect('/user');
+          err ? console.log(err) : res.redirect('/home');
         });
       }
     });
@@ -101,11 +109,16 @@ router
           res.redirect('signup');
         } else {
           passport.authenticate('local')(req, res, () => {
-            res.redirect('/user');
+            res.redirect('/home');
           });
         }
       }
     );
   });
+
+router.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('/home');
+});
 
 module.exports = router;
