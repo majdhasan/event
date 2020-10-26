@@ -5,7 +5,7 @@
 </div>
 <% if (events.length > 0 ) {%>
 <br />
-<h2>Events</h2>
+<h2>Your upcoming Events</h2>
 <% }%> <% events.forEach((event) =>{ %>
 <h3><%= event.title %></h3>
 <p><a href="/event?id=<%=event._id%>"> Read more...</a></p>
