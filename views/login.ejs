@@ -1,0 +1,47 @@
+<%- include('partials/header'); -%>
+<link rel="stylesheet" href="/css/login.css" />
+<div class="text-center">
+  <div class="container-fluid login-header">
+    <h2>Login</h2>
+  </div>
+  <form class="form-signin" action="/login" method="post">
+    <!-- <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
+
+    <label for="inputUsername" class="sr-only">Email address</label>
+    <input
+      name="username"
+      type="text"
+      id="inputUsername"
+      class="form-control"
+      placeholder="Username"
+      required
+      autofocus
+    />
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input
+      name="password"
+      type="password"
+      id="inputPassword"
+      class="form-control"
+      placeholder="Password"
+      required
+    />
+    <div class="checkbox mb-3">
+      <label> <input type="checkbox" value="remember-me" /> Remember me </label>
+    </div>
+    <button class="btn btn-lg btn-block signin-btn" type="submit">Login</button>
+  </form>
+  <h6 class="seperator"><span>or</span></h6>
+
+  <a href="#" class="fb btn">
+    <i class="fa fa-facebook fa-fw"></i> Login with Facebook </a
+  ><br />
+  <a href="#" class="twitter btn">
+    <i class="fa fa-twitter fa-fw"></i> Login with Twitter </a
+  ><br />
+  <a href="#" class="google btn">
+    <i class="fa fa-google fa-fw"></i> Login with Google+
+  </a>
+</div>
+
+<%- include('partials/footer'); -%>

@@ -1,0 +1,24 @@
+<%- include('partials/header'); -%>
+
+<div class="container-fluid">
+  <h1>Hi cool guy</h1>
+</div>
+<% if (events.length > 0 ) {%>
+<br />
+<h2>Events</h2>
+<% }%> <% events.forEach((event) =>{ %>
+<h3><%= event.title %></h3>
+<p><a href="/event?id=<%=event._id%>"> Read more...</a></p>
+<% }) %>
+
+<a href="/event/new"
+  ><button
+    class="btn btn-primary btn-lg btn-dark btn-home"
+    type="button"
+    name="button"
+  >
+    Create an Eventisimmo
+  </button></a
+>
+
+<%- include('partials/footer'); -%>
