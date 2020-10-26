@@ -19,19 +19,19 @@ router.use((req, res, next) => {
   next();
 });
 
-// router.route('/').get((req, res) => {
-//   if (req.isAuthenticated()) {
-//     Event.find((err, results) => {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         res.render('home', { events: results });
-//       }
-//     });
-//   } else {
-//     res.redirect('/login');
-//   }
-// });
+router.route('/user').get((req, res) => {
+  if (req.isAuthenticated()) {
+    Event.find((err, results) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.render('home', { events: results });
+      }
+    });
+  } else {
+    res.redirect('/login');
+  }
+});
 
 router
   .route('/event')
@@ -50,7 +50,7 @@ router
         console.log(err);
       } else {
         console.log('New Event has been created');
-        res.redirect('/');
+        res.redirect('/user');
       }
     });
   });
@@ -64,7 +64,6 @@ router
   .get((req, res) => {})
   .post((req, res) => {});
 
-router.route('/user');
 
 router
   .route('/login')
@@ -81,7 +80,7 @@ router
         console.log(err);
       } else {
         passport.authenticate('local')(req, res, (err, scc) => {
-          err ? console.log(err) : res.redirect('/');
+          err ? console.log(err) : res.redirect('/user');
         });
       }
     });
@@ -102,7 +101,7 @@ router
           res.redirect('signup');
         } else {
           passport.authenticate('local')(req, res, () => {
-            res.redirect('/');
+            res.redirect('/user');
           });
         }
       }
