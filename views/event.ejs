@@ -1,10 +1,21 @@
 <%- include('partials/header'); -%>
-
-<div class="container-fluid">
-  <h1>About page</h1>
-  <p><%= content%></p>
+<h1>Event details</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 m-auto">
+      <h1>Title: <%- event.title %></h1>
+      <p>Description:<%- event.body %></p>
+      <% if (event.guests.length > 0 ){ %>
+      <h3>Guests</h3>
+      <ul>
+        <% event.guests.forEach((guest) =>{ %>
+        <li><%- guest.firstname + " " + guest.lastname %> </li>
+        <% }) %>
+      </ul>
+      <% } %>
+      <p>Type: <%- event.type %> </p>
+<p>Date: <%- event.date %> </p>
+  </div>
 </div>
-
-
 
 <%- include('partials/footer'); -%>

@@ -1,7 +1,7 @@
 <%- include('partials/header'); -%>
 
 <div class="container-fluid">
-  <h1>Hi cool guy</h1>
+  <h1>Hi <%- user.firstname + ' ' + user.lastname %></h1>
 </div>
 <% if (events.length > 0 ) {%>
 <br />

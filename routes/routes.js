@@ -26,7 +26,7 @@ router.route('/home').get((req, res) => {
         console.log(err);
       } else {
         console.log(req.user._id);
-        res.render('home', { events: results });
+        res.render('home', { user: req.user, events: results });
       }
     });
   } else {
@@ -36,12 +36,22 @@ router.route('/home').get((req, res) => {
 
 router
   .route('/event')
-  .get((req, res) => {})
+  .get((req, res) => {
+    Event.findById(req.query.id, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        res.render('event', { event: result });
+      }
+    });
+  })
   .post((req, res) => {
     if (req.isAuthenticated()) {
       let newEvent = new Event({
         title: req.body.title,
         body: req.body.description,
+        type: req.body.eventType,
         creator: req.user._id,
         date: new Date(),
         comments: [],
@@ -70,7 +80,7 @@ router.route('/event/new').get((req, res) => {
 
 router
   .route('/event/:id')
-  .get((req, res) => {})
+  .get()
   .post((req, res) => {});
 
 router
@@ -101,7 +111,7 @@ router
   })
   .post((req, res) => {
     User.register(
-      { username: req.body.username },
+      { username: req.body.username , firstname: req.body.fname , lastname : req.body.lname },
       req.body.password,
       (err, result) => {
         if (err) {
