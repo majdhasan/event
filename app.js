@@ -8,6 +8,7 @@ const router = require('./routes/routes');
 const session = require('express-session');
 const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
+const _ = require('lodash');
 
 
 // Initialized Express App
