@@ -21,10 +21,11 @@ router.use((req, res, next) => {
 
 router.route('/home').get((req, res) => {
   if (req.isAuthenticated()) {
-    Event.find((err, results) => {
+    Event.find({ creator: req.user._id }, (err, results) => {
       if (err) {
         console.log(err);
       } else {
+        console.log(req.user._id);
         res.render('home', { events: results });
       }
     });
@@ -41,7 +42,7 @@ router
       let newEvent = new Event({
         title: req.body.title,
         body: req.body.description,
-        //   creator: req.body.userId,
+        creator: req.user._id,
         date: new Date(),
         comments: [],
         guests: [],
@@ -65,7 +66,6 @@ router.route('/event/new').get((req, res) => {
   } else {
     res.redirect('/login');
   }
-  
 });
 
 router

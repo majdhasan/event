@@ -5,10 +5,10 @@ const eventSchema = new Schema({
   title: String,
   body: String,
   date: { type: Date, default: Date.now },
-  // creator: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'User',
-  // },
+  creator: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
   comments: [{ body: String, date: Date }],
   guests: [{ type: Schema.ObjectId, ref: 'User' }],
 });
