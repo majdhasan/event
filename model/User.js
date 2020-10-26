@@ -12,6 +12,15 @@ const userSchema = new Schema({
   password: String,
   firstname: String,
   lastname: String,
+  company: {
+    type: Schema.Types.ObjectId,
+    ref: 'Company',
+  },
+  gender: {
+    type: String,
+    enum: ['male', 'female', 'diverse'],
+  },
+  
 });
 
 userSchema.plugin(passportLocalMongoose);
