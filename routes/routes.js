@@ -5,6 +5,7 @@ const { render } = require('ejs');
 const passport = require('passport');
 const Event = require('../model/Event');
 const User = require('../model/User');
+const Founder = require('../model/Founder');
 
 const router = express.Router();
 
@@ -18,6 +19,33 @@ router.use((req, res, next) => {
   console.log(`${new Date()}: Incoming request from ${req.headers.host} `);
   next();
 });
+
+//Founders
+router.route('/founder').get((req, res) => {
+  Founder.findById(req.query.id, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(404);
+      res.redirect('/404');
+    } else {
+      res.render('founder', { founder: result });
+    }
+  });
+}).post((req,res)=>{
+  let founder = new Founder({
+    name : req.body.name,
+    description : req.body.description,
+    avatar : req.body.avatar,
+    map: req.body.map
+  });
+  founder.save((err, scc)=>{
+    if (err) {
+      console.log(err);
+    }else{
+      res.send("Successfully added founder")
+    }
+  })
+})
 
 router.route('/home').get((req, res) => {
   if (req.isAuthenticated()) {
@@ -111,7 +139,11 @@ router
   })
   .post((req, res) => {
     User.register(
-      { username: req.body.username , firstname: req.body.fname , lastname : req.body.lname },
+      {
+        username: req.body.username,
+        firstname: req.body.fname,
+        lastname: req.body.lname,
+      },
       req.body.password,
       (err, result) => {
         if (err) {
