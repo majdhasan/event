@@ -11,10 +11,18 @@ const eventSchema = new Schema({
   date: { type: Date, default: Date.now },
   creator: { type: Schema.Types.ObjectId, ref: 'User' },
   partners: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  comments: [{ body: String, date: Date }],
+  comments: [
+    {
+      author: String,
+      content: String,
+      date: { type: Date, default: Date.now },
+      likes: Number,
+    },
+  ],
   invites: [{ type: Schema.ObjectId, ref: 'Invite' }],
   canAccess: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   type: { type: String, enum: ['public', 'private'] },
+  lookingFor: [{ service: String, amount: String, details: String }],
 });
 
 const Event = mongoose.model('Event', eventSchema);

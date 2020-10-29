@@ -153,6 +153,44 @@ router
     });
   });
 
+router.route('/comment').post((req, res) => {
+  if (req.isAuthenticated()) {
+    Event.findById(req.query.id, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        if (result.canAccess.includes(req.user._id)) {
+          Event.findByIdAndUpdate(
+            req.query.id,
+            {
+              $push: {
+                comments: {
+                  author: req.user.firstname + ' ' + req.user.lastname,
+                  content: req.body.content,
+                  date: new Date(),
+                  likes: 0,
+                },
+              },
+            },
+            (err, scc) => {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log(scc);
+                res.redirect(`/event?id=${req.query.id}`);
+              }
+            }
+          );
+        } else {
+          res.status(401).send('You have no access rights');
+        }
+      }
+    });
+  } else {
+    res.status(401).redirect('/login');
+  }
+});
+
 router
   .route('/signup')
   .get((req, res) => {

@@ -44,4 +44,67 @@
   </div>
 </div>
 
+<hr />
+<section id="comments">
+  <div class="row">
+    <div class="col-sm-8">
+      <form action="/comment?id=<%- event._id %> " method="POST">
+        <h4 class="new-comment">New Comment</h4>
+        <fieldset>
+          <div class="row">
+            <div class="col-sm-3 col-lg-2 hidden-xs">
+              <img
+                class="img-responsive"
+                src="https://bootdey.com/img/Content/avatar/avatar1.png"
+                alt=""
+              />
+            </div>
+            <div class="form-group col-xs-12 col-sm-9 col-lg-10">
+              <textarea
+                class="form-control"
+                id="message"
+                name="content"
+                placeholder="Your message"
+                required=""
+                rows="4"
+              ></textarea>
+            </div>
+            <button type="submit" class="btn btn-normal ml-auto">Submit</button>
+          </div>
+        </fieldset>
+      </form>
+
+      <% if (event.comments.length === 0) {%> <% } else if (event.comments.length === 1) {%>
+
+      <h4>1 Comment</h4>
+      <% } else { %>
+      <h4><%- event.comments.length %> Comments</h4>
+      <% } %> <% event.comments.reverse().forEach((comment, i) => { %>
+      <!-- COMMENT  START -->
+      <div class="media">
+        <a class="pull-left" href="#"
+          ><img
+            class="img-responsive"
+            src="https://bootdey.com/img/Content/avatar/avatar1.png"
+            alt=""
+        /></a>
+        <div class="media-body">
+          <h4 class="media-heading"><%- comment.author %></h4>
+          <p><%- comment.content %></p>
+          <ul class="list-unstyled list-inline media-detail">
+            <li><i class="fa fa-calendar"></i><%- comment.date %></li>
+            <!-- <li>
+              <a href="/comment/like?event=<%- event._id %>&id=<%- i %>"
+                ><i class="fas fa-thumbs-up fa-2x"></i><%- comment.likes %></a
+              >
+            </li> -->
+          </ul>
+        </div>
+      </div>
+      <!-- COMMENT  END -->
+      <% }); %>
+    </div>
+  </div>
+</section>
+
 <%- include('partials/footer-light'); -%>
