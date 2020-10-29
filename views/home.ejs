@@ -1,35 +1,63 @@
 <%- include('partials/header'); -%>
 
-<div class="container-fluid">
-  <h1>Hi <%- user.firstname + ' ' + user.lastname %></h1>
+<div class="row">
+  <div class="col col-lg-2 col-md-12 col-sm-12 col-sx-12 col-sx-12">
+    <img
+      class="event-avatar d-block mx-auto mx-md-0"
+      src="https://media-exp1.licdn.com/dms/image/C5603AQHpBr_qJDHjpw/profile-displayphoto-shrink_400_400/0?e=1609372800&amp;v=beta&amp;t=SzHK75ycpvj542YP57KjMICFkWqXmMAwNmPR9d05uus"
+      alt=""
+    />
+  </div>
+  <div class="col col-lg-6 col-md-12 col-sm-12 col-sx-12">
+    <h1>Hi <%- user.firstname + ' ' + user.lastname %></h1>
+  </div>
+  <div class="col col-lg-3 col-md-12 col-sm-12 col-sx-12 ml-auto">
+    <a href="/event/new"
+      ><button
+        class="btn btn-primary btn-lg btn-dark btn-home"
+        type="button"
+        name="button"
+      >
+        +
+      </button></a
+    >
+
+    <a href="/logout"
+      ><button
+        class="btn btn-primary btn-lg btn-dark btn-home"
+        type="button"
+        name="button"
+      >
+        Logout
+      </button></a
+    >
+  </div>
 </div>
+
+<hr />
 <% if (events.length > 0 ) {%>
-<br />
-<h2>Your upcoming Events</h2>
-<% }%> <% events.forEach((event) =>{ %>
-<h3><%= event.title %></h3>
-<p><a href="/event?id=<%=event._id%>"> Read more...</a></p>
-<% }) %>
 
-<a href="/event/new"
-  ><button
-    class="btn btn-primary btn-lg btn-dark btn-home"
-    type="button"
-    name="button"
-  >
-    Create an Eventisimmo
-  </button></a
->
+<h4>Your upcoming Events</h4>
 
-<a href="/logout"
-  ><button
-    class="btn btn-primary btn-lg btn-dark btn-home"
-    type="button"
-    name="button"
-  >
-    Logout
-  </button></a
->
+<div class="row">
+  <% }%> <% events.forEach((event) =>{ %>
+  <div class="col col-lg-3 col-md-6 col-sm-12">
+    <div class="event">
+      <a href="/event?id=<%=event._id%>">
+        <img
+          src="https://images.unsplash.com/photo-1551818255-e6e10975bc17?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"
+          alt=""
+        />
 
+        <h1><%= event.title %></h1>
 
-<%- include('partials/footer'); -%>
+        <p><%- event.date.toLocaleDateString('de-DE'); %></p>
+        <p><%- event.body.substring(0,50) + '...' %></p>
+        <hr />
+      </a>
+    </div>
+  </div>
+  <% }) %>
+</div>
+
+<%- include('partials/footer-light'); -%>

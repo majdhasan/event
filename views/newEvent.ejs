@@ -1,30 +1,43 @@
 <%- include('partials/header'); -%>
 
-<div class="container-fluid">
+
     <h2>Create an Event</h2>
-  </div>
+
 <form class="new-event-form" method="POST" action="/event">
     <div class="form-group">
-      <label for="title">Title</label> 
-      <input id="title" name="title" type="text" required="required" class="form-control">
+     
+      <input placeholder="Title" id="title" name="title" type="text" required="required" class="form-control">
     </div>
     <div class="form-group">
-      <label for="description">Description</label> 
-      <textarea id="description" name="description" cols="40" rows="5" required="required" class="form-control"></textarea>
+      <textarea placeholder="Description" id="description" name="description" cols="40" rows="5" required="required" class="form-control"></textarea>
     </div>
+
+
     <div class="form-group">
-      <label>Type</label> 
-      <div>
-        <div class="custom-control custom-radio custom-control-inline">
+        <div class="custom-control custom-radio">
           <input name="eventType" id="eventType_0" type="radio" class="custom-control-input" value="private" required="required"> 
           <label for="eventType_0" class="custom-control-label">Private</label>
         </div>
-        <div class="custom-control custom-radio custom-control-inline">
+        <div class="custom-control custom-radio">
           <input name="eventType" id="eventType_1" type="radio" class="custom-control-input" value="public" required="required"> 
-          <label for="eventType_1" class="custom-control-label">Public</label>
-        </div>
+          <label for="eventType_1" class="custom-control-label">Public</label>  
+        </div>    
+    </div>
+
+    <div class="form-group">
+      <input name="street"  placeholder="Address" type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-8 address-input">
+        <input name="city"  placeholder="City" type="text" class="form-control" id="inputCity">
+      </div>
+      <div class="form-group col-md-4 address-input">
+        <input name="zip"  placeholder="Zip" type="text" class="form-control" id="inputZip">
       </div>
     </div>
+
+
     <div class="form-group">
       <label for="date">Date</label> 
       <input id="date" name="date" type="date" class="form-control">

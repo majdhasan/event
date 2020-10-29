@@ -1,22 +1,47 @@
 <%- include('partials/header'); -%>
-<h1>Event details</h1>
-<div class="container">
-  <div class="row">
-    <div class="col-md-6 m-auto">
-      <h1>Title: <%- event.title %></h1>
-      <p>Description:<%- event.body %></p>
-      <% if (event.guests.length > 0 ){ %>
-      <h3>Guests</h3>
-      <ul>
-        <% event.guests.forEach((guest) =>{ %>
-        <li><%- guest.firstname + " " + guest.lastname %></li>
-        <% }) %>
-      </ul>
+
+<div class="row">
+  <div class="col col-lg-3 col-md-5 col-sm-5 col-sx-12">
+    <img
+      class="event-avatar d-block mx-auto mx-md-0"
+      src="https://images.unsplash.com/photo-1551818255-e6e10975bc17?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"
+      alt=""
+    />
+  </div>
+  <div class="col col-lg-9 col-md-7 col-sm-7 col-sx-12">
+    <div class="row">
+      <h1><%- event.title %></h1>
+    </div>
+    <div class="row">
+      <b> <%- event.date.toLocaleDateString('de-DE'); %></b>
+    </div>
+    <div class="row">
+      <%- event.street + ", " + event.zip +' ' + event.city %>
+    </div>
+    <div class="row">
+      <% if (event.type === "private"){ %>
+      <i class="fas fa-lock-alt"></i>
+      <% }else{ %>
+      <i class="fas fa-unlock-alt"></i>
       <% } %>
-      <p>Type: <%- event.type %></p>
-      <p>Date: <%- event.date %></p>
     </div>
   </div>
 </div>
 
-<%- include('partials/footer'); -%>
+<hr />
+
+<div class="row">
+  <div class="col">
+    <p><%- event.body %></p>
+    <% if (event.guests.length > 0 ){ %>
+    <h3>Guests</h3>
+    <ul>
+      <% event.guests.forEach((guest) =>{ %>
+      <li><%- guest.firstname + " " + guest.lastname %></li>
+      <% }) %>
+    </ul>
+    <% } %>
+  </div>
+</div>
+
+<%- include('partials/footer-light'); -%>

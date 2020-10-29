@@ -4,6 +4,10 @@ const { Schema } = mongoose;
 const eventSchema = new Schema({
   title: String,
   body: String,
+  street: String,
+  city: String,
+  zip: String,
+  country: String,
   date: { type: Date, default: Date.now },
   creator: { type: Schema.Types.ObjectId, ref: 'User' },
   partners: [{ type: Schema.Types.ObjectId, ref: 'User' }],
