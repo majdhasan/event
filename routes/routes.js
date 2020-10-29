@@ -6,6 +6,7 @@ const passport = require('passport');
 const Event = require('../model/Event');
 const User = require('../model/User');
 const Founder = require('../model/Founder');
+const Invite = require('../model/Invite');
 
 const router = express.Router();
 
@@ -72,11 +73,22 @@ router
       if (err) {
         console.log(err);
       } else {
-        console.log(result);
-        res.render('event', { event: result });
+        if (result.type === 'public') {
+          res.render('event', { event: result });
+        } else {
+          if (
+            req.isAuthenticated() &&
+            result.canAccess.includes(req.user._id)
+          ) {
+            res.render('event', { event: result });
+          } else {
+            res.status(403).send('You have no access');
+          }
+        }
       }
     });
   })
+
   .post((req, res) => {
     if (req.isAuthenticated()) {
       let newEvent = new Event({
@@ -90,8 +102,10 @@ router
         creator: req.user._id,
         date: req.body.date,
         comments: [],
-        guests: [],
+        canAccess: [],
+        invites: [],
       });
+      newEvent.canAccess.push(req.user._id);
       newEvent.save((err, result) => {
         if (err) {
           console.log(err);

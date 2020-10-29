@@ -11,18 +11,16 @@
     <div class="form-group">
       <textarea placeholder="Description" id="description" name="description" cols="40" rows="5" required="required" class="form-control"></textarea>
     </div>
-
-
     <div class="form-group">
-        <div class="custom-control custom-radio">
-          <input name="eventType" id="eventType_0" type="radio" class="custom-control-input" value="private" required="required"> 
-          <label for="eventType_0" class="custom-control-label">Private</label>
-        </div>
-        <div class="custom-control custom-radio">
-          <input name="eventType" id="eventType_1" type="radio" class="custom-control-input" value="public" required="required"> 
-          <label for="eventType_1" class="custom-control-label">Public</label>  
-        </div>    
+    <div class="custom-control custom-radio custom-control-inline">
+      <input type="radio" id="public" value="public" name="eventType" class="custom-control-input">
+      <label class="custom-control-label" for="public">Public</label>
     </div>
+    <div class="custom-control custom-radio custom-control-inline">
+      <input type="radio" id="private" value="private" name="eventType" class="custom-control-input">
+      <label class="custom-control-label" for="private">Private</label>
+    </div>
+  </div>
 
     <div class="form-group">
       <input name="street"  placeholder="Address" type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">

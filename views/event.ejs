@@ -33,11 +33,11 @@
 <div class="row">
   <div class="col">
     <p><%- event.body %></p>
-    <% if (event.guests.length > 0 ){ %>
+    <% if (event.invites.length > 0 ){ %>
     <h3>Guests</h3>
     <ul>
-      <% event.guests.forEach((guest) =>{ %>
-      <li><%- guest.firstname + " " + guest.lastname %></li>
+      <% event.invites.forEach((invite) =>{ %>
+      <!-- <li><%- invite.firstname + " " + invite.lastname %></li> -->
       <% }) %>
     </ul>
     <% } %>

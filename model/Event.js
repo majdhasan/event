@@ -12,7 +12,7 @@ const eventSchema = new Schema({
   creator: { type: Schema.Types.ObjectId, ref: 'User' },
   partners: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   comments: [{ body: String, date: Date }],
-  guests: [{ type: Schema.ObjectId, ref: 'User' }],
+  invites: [{ type: Schema.ObjectId, ref: 'Invite' }],
   canAccess: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   type: { type: String, enum: ['public', 'private'] },
 });
