@@ -1,0 +1,84 @@
+<%- include('partials/header'); -%>
+
+    <!-- Login -->
+    <section class="content-section bg-light" id="about">
+      <div class="container text-center">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            <h2>Sign up</h2>
+
+            <form class="form-signin" action="/signup" method="post">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="mx-auto form-control login-fields"
+                  name="fname"
+                  placeholder="First name"
+                  required="required"
+                />
+              </div>
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="mx-auto form-control login-fields"
+                  name="lname"
+                  placeholder="Last name"
+                  required="required"
+                />
+              </div>
+              <hr />
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="mx-auto form-control login-fields"
+                  name="username"
+                  placeholder="Username"
+                  required="required"
+                />
+              </div>
+              <div class="form-group">
+                <input
+                  type="password"
+                  class="mx-auto form-control login-fields"
+                  name="password"
+                  placeholder="Password"
+                  required="required"
+                />
+              </div>
+              <div class="form-group">
+                <input
+                  type="password"
+                  class="mx-auto form-control login-fields"
+                  name="confirm_password"
+                  placeholder="Confirm Password"
+                  required="required"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-check-label"
+                  ><input type="checkbox" required="required" /> I accept the
+                  <a href="#">Terms of Use</a> &amp;
+                  <a href="#">Privacy Policy</a></label
+                >
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-lg signup-btn login-fields">
+                  Sign Up
+                </button>
+              </div>
+            </form>
+            <hr />
+            <div class="form-group">
+              <a href="/login">
+                <button class="btn btn-primary btn-lg signup-btn login-fields">
+                  Already a member?
+                </button></a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <%- include('partials/footer'); -%>

@@ -59,7 +59,7 @@ router.route('/home').get((req, res) => {
         console.log(err);
       } else {
         console.log(req.user._id);
-        res.render('home', { user: req.user, events: results });
+        res.render('newView/home', { user: req.user, events: results });
       }
     });
   } else {
@@ -75,7 +75,7 @@ router
         console.log(err);
       } else {
         if (result.type === 'public') {
-          res.render('event', { event: result });
+          res.render('newView/event', { event: result });
         } else {
           if (
             req.isAuthenticated() &&
@@ -123,7 +123,7 @@ router
 
 router.route('/event/new').get((req, res) => {
   if (req.isAuthenticated()) {
-    res.render('newEvent');
+    res.render('newView/newEvent');
   } else {
     res.redirect('/login');
   }
@@ -137,7 +137,7 @@ router
 router
   .route('/login')
   .get((req, res) => {
-    req.isAuthenticated() ? res.redirect('/home') : res.render('login');
+    req.isAuthenticated() ? res.redirect('/home') : res.render('newView/login');
   })
   .post((req, res) => {
     let user = new User({
@@ -196,7 +196,7 @@ router.route('/comment').post((req, res) => {
 router
   .route('/signup')
   .get((req, res) => {
-    res.render('signup');
+    res.render('newView/signup');
   })
   .post((req, res) => {
     User.register(
