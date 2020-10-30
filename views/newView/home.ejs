@@ -59,7 +59,7 @@
 
             <h1><%= event.title %></h1>
 
-            <p><%- event.date.toLocaleDateString('de-DE'); %></p>
+            <p><%- event.date && event.date.toLocaleDateString('de-DE'); %></p>
             <p><%- event.body.substring(0,50) + '...' %></p>
             <hr />
           </a>

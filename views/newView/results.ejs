@@ -1,0 +1,35 @@
+<%- include('partials/header'); -%>
+
+<!-- Login -->
+<section class="content-section bg-light" id="about">
+  <div class="container text-center">
+
+    <h2>Search results for <u><%- what %></u> in <u><%- where %></u> </h2>
+   
+    <% if (events.length > 0 ) {%>
+
+    <div class="row">
+      <% }%> <% events.forEach((event) =>{ %>
+      <div class="col col-lg-3 col-md-6 col-sm-12">
+        <div class="event">
+          <a href="/event?id=<%=event._id%>">
+            <img
+              src="https://images.unsplash.com/photo-1551818255-e6e10975bc17?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"
+              alt=""
+            />
+
+            <h1><%= event.title %></h1>
+
+            <p><%- event.date && event.date.toLocaleDateString('de-DE'); %></p>
+            <p><%- event.body.substring(0,50) + '...' %></p>
+            <hr />
+          </a>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<%- include('partials/footer'); -%>

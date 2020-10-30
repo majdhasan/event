@@ -23,7 +23,7 @@
           </form>
         </div>
         <div class="row">
-          <b> <%- event.date.toLocaleDateString('de-DE'); %></b>
+          <b> <%- event.date && event.date.toLocaleDateString('de-DE'); %></b>
         </div>
         <div class="row">
           <%- event.street + ", " + event.zip +' ' + event.city %>
@@ -105,7 +105,7 @@
               <h4 class="media-heading"><%- comment.author %></h4>
               <p><%- comment.content %></p>
               <ul class="list-unstyled list-inline media-detail">
-                <li><i class="fa fa-calendar"></i><%- comment.date %></li>
+                <li><i class="fa fa-calendar"></i><%- comment.date && comment.date %></li>
                 <!-- <li>
                       <a href="/comment/like?event=<%- event._id %>&id=<%- i %>"
                         ><i class="fas fa-thumbs-up fa-2x"></i><%- comment.likes %></a

@@ -77,17 +77,18 @@
     <header class="bar-header d-flex">
       <div class="container text-center my-auto">
         <div class="s01">
-          <form>
+          <form method="POST" action="/search">
             <h1 class="mb-2 dark-background">Find your next job!</h1>
             <div class="inner-form">
               <div class="input-field first-wrap">
-                <input id="search" type="text" placeholder="Where are you?" />
+                <input name="what" id="location" type="text" placeholder="What are you looking for?" />
               </div>
               <div class="input-field second-wrap">
-                <input id="location" type="text" placeholder="What are you looking for?" />
+                <input name="where" id="search" type="text" placeholder="Where?" />
               </div>
+
               <div class="input-field third-wrap">
-                <button class="btn-search" type="button">Search</button>
+                <button class="btn-search" type="submit">Search</button>
               </div>
             </div>
           </form>

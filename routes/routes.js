@@ -81,7 +81,7 @@ router
             req.isAuthenticated() &&
             result.canAccess.includes(req.user._id)
           ) {
-            res.render('event', { event: result });
+            res.render('newView/event', { event: result });
           } else {
             res.status(403).send('You have no access');
           }
@@ -317,5 +317,24 @@ router
       res.status(401).send('You are not authorized');
     }
   });
+
+
+  router.route('/search').post((req,res)=>{
+  
+
+
+
+    Event.find({city: { $regex: req.body.where }, lookingFor:{ $regex: req.body.what }  }, (err, results)=>{
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(req.body.where +" "+req.body.what );
+        console.log("test"+results);
+      
+        res.render('newView/results', { events: results, where : req.body.where, what: req.body.what });
+      }
+    })
+
+  })
 
 module.exports = router;
