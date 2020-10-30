@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const inviteSchema = new Schema({
-  event: { type: Schema.ObjectId, ref: 'Event' },
+  event: {type: Schema.ObjectId, ref: 'Event'},
   sender: {type: Schema.Types.ObjectId,ref: 'User'},
-  reveiver: {type: Schema.Types.ObjectId,ref: 'User'},
+  recipient: {type: Schema.Types.ObjectId,ref: 'User'},
   message: String,
   status: {
     type: String,

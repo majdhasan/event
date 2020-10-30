@@ -7,6 +7,7 @@ const Event = require('../model/Event');
 const User = require('../model/User');
 const Founder = require('../model/Founder');
 const Invite = require('../model/Invite');
+const { findByIdAndUpdate } = require('../model/Event');
 
 const router = express.Router();
 
@@ -16,10 +17,10 @@ router.use(
   })
 );
 
-router.use((req, res, next) => {
-  console.log(`${new Date()}: Incoming request from ${req.headers.host} `);
-  next();
-});
+// router.use((req, res, next) => {
+//   console.log(`${new Date()}: Incoming request from ${req.headers.host} `);
+//   next();
+// });
 
 //Founders
 router
@@ -101,6 +102,7 @@ router
         country: req.body.country,
         creator: req.user._id,
         date: req.body.date,
+        lookingFor: req.body.lookingFor,
         comments: [],
         canAccess: [],
         invites: [],
@@ -202,6 +204,7 @@ router
         username: req.body.username,
         firstname: req.body.fname,
         lastname: req.body.lname,
+        pendingInvites: 0,
       },
       req.body.password,
       (err, result) => {
@@ -221,5 +224,98 @@ router.get('/logout', (req, res) => {
   req.logout();
   res.redirect('/home');
 });
+
+// Invites
+
+router
+  .route('/invite/new/:id')
+  .get((req, res) => {
+    if (req.isAuthenticated()) {
+      res.render('newInvite', { eventId: req.params.id });
+    } else {
+      res.status(401).send('You are not authorized');
+    }
+  })
+  .post();
+
+router
+  .route('/invite')
+
+  .get((req, res) => {
+    if (req.isAuthenticated()) {
+      Invite.findById(req.query.id, (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          Event.findById(result.event, (err, foundEvent) => {
+            if (err) {
+              console.log(err);
+            } else {
+              res.render('invite', { invite: result, event: foundEvent });
+            }
+          });
+        }
+      });
+    } else {
+      res.status(401).send('You are not authorized');
+    }
+  })
+
+  .post((req, res) => {
+    if (req.isAuthenticated()) {
+      console.log(req.body.recipient);
+      User.findOne({ username: req.body.recipient }, (err, scc) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('found user is: ' + scc);
+          let newInvite = new Invite({
+            event: req.body.event,
+            sender: req.user._id,
+            recipient: scc._id,
+            message: req.body.message,
+            status: 'pending',
+            comments: [],
+          });
+          newInvite.save((err, ans) => {
+            if (err) {
+              console.log(err);
+            } else {
+              Event.findByIdAndUpdate(
+                req.body.event,
+                {
+                  $push: {
+                    invites: {
+                      _id: ans._id,
+                    },
+                  },
+                },
+                (err, scc) => {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    User.findOneAndUpdate(
+                      {username:req.body.recipient},
+                      { $inc: { pendingInvites: 1 } },
+                      (err, success) => {
+                        if (err) {
+                          console.log(err);
+                        } else {
+                          console.log(success);
+                          res.redirect(`/event?id=${req.body.event}`);
+                        }
+                      }
+                    );
+                  }
+                }
+              );
+            }
+          });
+        }
+      });
+    } else {
+      res.status(401).send('You are not authorized');
+    }
+  });
 
 module.exports = router;

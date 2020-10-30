@@ -20,7 +20,7 @@ const userSchema = new Schema({
     type: String,
     enum: ['male', 'female', 'diverse'],
   },
-  
+  pendingInvites: Number
 });
 
 userSchema.plugin(passportLocalMongoose);

@@ -1,0 +1,67 @@
+<%- include('partials/header'); -%>
+
+<h2>Create an Event</h2>
+
+<form class="new-event-form" method="POST" action="/invite">
+  <div class="form-group">
+    <input
+      placeholder="Event"
+      id="event"
+      name="event"
+      type="text"
+      value="<%- eventId %>"
+      required="required"
+      readonly
+      class="form-control"
+    />
+  </div>
+  <div class="form-group">
+    <input
+      placeholder="Recipient"
+      id="recipient"
+      name="recipient"
+      type="text"
+      required="required"
+      class="form-control"
+    />
+  </div>
+  <div class="form-group">
+    <input
+      placeholder="Title"
+      id="title"
+      name="title"
+      type="text"
+      required="required"
+      class="form-control"
+    />
+  </div>
+  <div class="form-group">
+    <textarea
+      placeholder="Message"
+      id="message"
+      name="message"
+      cols="40"
+      rows="5"
+      required="required"
+      class="form-control"
+    ></textarea>
+  </div>
+
+  <div class="form-group">
+    <textarea
+      placeholder="Looking for"
+      id="lookingFor"
+      name="lookingFor"
+      cols="40"
+      rows="3"
+      class="form-control"
+    ></textarea>
+  </div>
+
+  <div class="form-group">
+    <button name="submit" type="submit" class="btn btn-primary">Send</button>
+  </div>
+</form>
+
+<script src="/js/index.js"></script>
+<%- include('partials/footer'); -%>

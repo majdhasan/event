@@ -22,9 +22,9 @@ const eventSchema = new Schema({
   invites: [{ type: Schema.ObjectId, ref: 'Invite' }],
   canAccess: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   type: { type: String, enum: ['public', 'private'] },
-  lookingFor: [{ service: String, amount: String, details: String }],
+  lookingFor: String,
 });
 
 const Event = mongoose.model('Event', eventSchema);
-
+  
 module.exports = Event;

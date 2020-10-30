@@ -11,6 +11,10 @@
   <div class="col col-lg-9 col-md-7 col-sm-7 col-sx-12">
     <div class="row">
       <h1><%- event.title %></h1>
+      <form class="ml-auto" action="/invite/new/<%- event._id %> " method="GET">
+        <button class="btn btn-primary">Send an Invite</button>
+    </form>
+     
     </div>
     <div class="row">
       <b> <%- event.date.toLocaleDateString('de-DE'); %></b>
@@ -25,6 +29,7 @@
       <i class="fas fa-unlock-alt"></i>
       <% } %>
     </div>
+
   </div>
 </div>
 
@@ -32,15 +37,23 @@
 
 <div class="row">
   <div class="col">
+    <h4> Description</h4>
     <p><%- event.body %></p>
-    <% if (event.invites.length > 0 ){ %>
-    <h3>Guests</h3>
+
+     <% if (event.invites !== undefined && event.invites.length > 0 ){ %>
+    <h4>Invites</h4>
     <ul>
       <% event.invites.forEach((invite) =>{ %>
-      <!-- <li><%- invite.firstname + " " + invite.lastname %></li> -->
+       <li> <a href="/invite?id=<%- invite %>">    <%- invite._id %></a></li> 
       <% }) %>
     </ul>
-    <% } %>
+    <% } %> 
+     
+    <% if (event.lookingFor !== undefined && event.lookingFor.length > 0 ){ %>
+      <hr>
+      <h4> Looking For</h4>
+      <p><%- event.lookingFor %></p>
+      <% } %>
   </div>
 </div>
 
@@ -74,7 +87,8 @@
         </fieldset>
       </form>
 
-      <% if (event.comments.length === 0) {%> <% } else if (event.comments.length === 1) {%>
+      <% if (event.comments.length === 0) {%> <% } else if
+      (event.comments.length === 1) {%>
 
       <h4>1 Comment</h4>
       <% } else { %>

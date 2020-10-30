@@ -9,7 +9,10 @@
     />
   </div>
   <div class="col col-lg-6 col-md-12 col-sm-12 col-sx-12">
-    <h1>Hi <%- user.firstname + ' ' + user.lastname %></h1>
+    <div class="row"><h1>Hi <%- user.firstname + ' ' + user.lastname %></h1></div>
+    <div class="row">
+    <p>You have <b><%- user.pendingInvites %></b> pending invites</p>  
+    </div>
   </div>
   <div class="col col-lg-3 col-md-12 col-sm-12 col-sx-12 ml-auto">
     <a href="/event/new"
