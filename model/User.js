@@ -12,9 +12,17 @@ const userSchema = new Schema({
   password: String,
   firstname: String,
   lastname: String,
+  type: {
+    type: String,
+    enum: ['costumer', 'supplier'],
+  },
   company: {
     type: Schema.Types.ObjectId,
     ref: 'Company',
+  },
+  address:{
+    type: Schema.Types.ObjectId,
+    ref: 'Address',
   },
   gender: {
     type: String,

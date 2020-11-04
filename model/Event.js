@@ -23,6 +23,7 @@ const eventSchema = new Schema({
   canAccess: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   type: { type: String, enum: ['public', 'private'] },
   lookingFor: String,
+  guestAmount: Number,
 });
 
 const Event = mongoose.model('Event', eventSchema);
