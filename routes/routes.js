@@ -8,6 +8,8 @@ const User = require('../model/User');
 const Founder = require('../model/Founder');
 const Invite = require('../model/Invite');
 const { findByIdAndUpdate } = require('../model/Event');
+const Conversation = require('../model/Conversation');
+const Message = require('../model/Message');
 
 const router = express.Router();
 
@@ -205,6 +207,7 @@ router
         firstname: req.body.fname,
         lastname: req.body.lname,
         pendingInvites: 0,
+        conversations: [],
       },
       req.body.password,
       (err, result) => {
@@ -295,7 +298,7 @@ router
                     console.log(err);
                   } else {
                     User.findOneAndUpdate(
-                      {username:req.body.recipient},
+                      { username: req.body.recipient },
                       { $inc: { pendingInvites: 1 } },
                       (err, success) => {
                         if (err) {
@@ -318,23 +321,149 @@ router
     }
   });
 
-
-  router.route('/search').post((req,res)=>{
-  
-
-
-
-    Event.find({city: { $regex: req.body.where }, lookingFor:{ $regex: req.body.what }  }, (err, results)=>{
+router.route('/search').post((req, res) => {
+  Event.find(
+    { city: { $regex: req.body.where }, lookingFor: { $regex: req.body.what } },
+    (err, results) => {
       if (err) {
         console.log(err);
       } else {
-        console.log(req.body.where +" "+req.body.what );
-        console.log("test"+results);
-      
-        res.render('newView/results', { events: results, where : req.body.where, what: req.body.what });
-      }
-    })
+        console.log(req.body.where + ' ' + req.body.what);
+        console.log('test' + results);
 
-  })
+        res.render('newView/results', {
+          events: results,
+          where: req.body.where,
+          what: req.body.what,
+        });
+      }
+    }
+  );
+});
+
+router.route('/bid').get((req, res) => {
+  Event.findById(req.query.id, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      User.findById(result.creator, (err, user) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.render('newView/eventSupplier', { event: result, user: user });
+        }
+      });
+    }
+  });
+});
+
+router.route('/chat').get((req, res) => {
+  if (req.isAuthenticated()) {
+    User.findById(req.user._id, (err, user) => {
+      if (err) {
+        console.log(err);
+      } else {
+        const conversationList = [];
+        user.conversations.forEach((conversationId) => {
+          Conversation.findById(conversationId, (err, conv) => {
+            if (err) {
+              reject(err);
+            } else {
+
+
+
+              conversationList.push(conv);
+              conv.participants.forEach((user) => {
+                if (String(user) === String(req.user._id)) {
+                } else {
+                  console.log('user id : ' + user);
+                  console.log('participant id: ' + req.user._id);
+                  getUserFullName(user).then((fullname) => {
+                    console.log(fullname);
+                    participantList.push(fullname);
+                  });
+                }
+              });
+            }
+          });
+        });
+        res.render('newView/chat', {
+          conversations: conversationList,
+        });
+      }
+    });
+  } else {
+    res.status(403).send('You have no access');
+  }
+});
+
+router.route('/chat/new/:id').get((req, res) => {
+  if (req.isAuthenticated()) {
+    let newConversation = new Conversation({
+      participants: [req.user._id, req.params.id],
+      messages: [],
+    });
+    newConversation.save((err, scc) => {
+      if (err) {
+        console.log(err);
+      } else {
+        User.findByIdAndUpdate(
+          req.user._id,
+          {
+            $push: {
+              conversations: {
+                _id: scc._id,
+                name: req.user.firstname + " " + req.user.lastname
+              },
+            },
+          },
+          (err, sender) => {
+            if (err) {
+              console.log(err);
+            } else {
+              User.findByIdAndUpdate(
+                req.params.id,
+                {
+                  $push: {
+                    conversations: {
+                      _id: scc._id,
+                      name: sender.firstname + " " + sender.lastname
+                    },
+                  },
+                },
+                (err, reciever) => {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    res.redirect('/chat');
+                  }
+                }
+              );
+            }
+          }
+        );
+      }
+    });
+  } else {
+    res
+      .status(401)
+      .send(
+        'You not to create an account or log in to be able to send messages'
+      );
+  }
+});
+
+const getUserFullName = (id) => {
+  return new Promise((resolve, reject) => {
+    User.findById(id, (err, foundUser) => {
+      if (err) {
+        reject(Error('It broke'));
+      } else {
+        let fullname = foundUser.firstname + ' ' + foundUser.lastname;
+        resolve(fullname);
+      }
+    });
+  });
+};
 
 module.exports = router;

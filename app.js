@@ -5,14 +5,16 @@ const dbConnection = require('./db/connect');
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 3000;
 const router = require('./routes/routes');
+const apiRouter = require('./routes/api-routes');
 const session = require('express-session');
 const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
 const _ = require('lodash');
-
+const cors = require('cors');
 
 // Initialized Express App
 const app = express();
+app.use(cors());
 app.use(
   bodyParser.urlencoded({
     extended: true,
@@ -34,6 +36,8 @@ app.use(passport.session());
 
 // Connect to DB
 dbConnection;
+
+app.use('/api/v1', apiRouter);
 
 app.use(router);
 

@@ -14,111 +14,34 @@
       <div class="col col-lg-9 col-md-7 col-sm-7 col-sx-12">
         <div class="row">
           <h1><%- event.title %></h1>
-          <form
-            class="ml-auto"
-            action="/invite/new/<%- event._id %> "
-            method="GET"
-          >
-            <button class="btn btn-primary">Send an Invite</button>
+          <form class="ml-auto" action="/chat/new/<%- user._id %>" method="GET">
+            <button class="btn btn-primary">Send a Message</button>
           </form>
         </div>
         <div class="row">
           <b> <%- event.date && event.date.toLocaleDateString('de-DE'); %></b>
         </div>
         <div class="row">
-          <%- event.street + ", " + event.zip +' ' + event.city %>
+          <span><%- event.street + ", " + event.zip +' ' + event.city %></span>
         </div>
         <div class="row">
-          <% if (event.type === "private"){ %>
-          <i class="fas fa-lock-alt"></i>
-          <% }else{ %>
-          <i class="fas fa-unlock-alt"></i>
-          <% } %>
+          From: <%- user && (user.firstname +' ' + user.lastname) %>
         </div>
       </div>
     </div>
-
     <hr />
-
     <div class="row">
       <div class="col">
         <h4>Description</h4>
-        <p><%- event.body %></p>
-
-        <% if (event.invites !== undefined && event.invites.length > 0 ){ %>
-        <h4>Invites</h4>
-        <ul>
-          <% event.invites.forEach((invite) =>{ %>
-          <li><a href="/invite?id=<%- invite %>"> <%- invite._id %></a></li>
-          <% }) %>
-        </ul>
-        <% } %> <% if (event.lookingFor !== undefined && event.lookingFor.length
-        > 0 ){ %>
+        <p><%- event.descriptionForSupplier %></p>
+        <% if (event.lookingFor !== undefined && event.lookingFor.length > 0 ){
+        %>
         <hr />
         <h4>Looking For</h4>
         <p><%- event.lookingFor %></p>
         <% } %>
       </div>
     </div>
-
-    <hr />
-    <section id="comments">
-      <div class="row">
-        <div class="col-sm-8">
-          <form action="/comment?id=<%- event._id %> " method="POST">
-            <h4 class="new-comment">New Comment</h4>
-            <fieldset>
-              <div class="row">
-                <div class="form-group col-xs-12 col-sm-12 col-lg-12">
-                  <textarea
-                    class="form-control"
-                    id="message"
-                    name="content"
-                    placeholder="Your message"
-                    required=""
-                    rows="4"
-                  ></textarea>
-                </div>
-                <button type="submit" class="btn btn-normal ml-auto">
-                  Submit
-                </button>
-              </div>
-            </fieldset>
-          </form>
-
-          <% if (event.comments.length === 0) {%> <% } else if
-          (event.comments.length === 1) {%>
-
-          <h4>1 Comment</h4>
-          <% } else { %>
-          <h4><%- event.comments.length %> Comments</h4>
-          <% } %> <% event.comments.reverse().forEach((comment, i) => { %>
-          <!-- COMMENT  START -->
-          <div class="media">
-            <a class="pull-left" href="#"
-              ><img
-                class="img-responsive"
-                src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                alt=""
-            /></a>
-            <div class="media-body">
-              <h4 class="media-heading"><%- comment.author %></h4>
-              <p><%- comment.content %></p>
-              <ul class="list-unstyled list-inline media-detail">
-                <li><i class="fa fa-calendar"></i><%- comment.date && comment.date %></li>
-                <!-- <li>
-                      <a href="/comment/like?event=<%- event._id %>&id=<%- i %>"
-                        ><i class="fas fa-thumbs-up fa-2x"></i><%- comment.likes %></a
-                      >
-                    </li> -->
-              </ul>
-            </div>
-          </div>
-          <!-- COMMENT  END -->
-          <% }); %>
-        </div>
-      </div>
-    </section>
   </div>
 </section>
 

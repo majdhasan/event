@@ -1,113 +1,120 @@
 <%- include('partials/header'); -%>
 
-    <!-- Login -->
-    <section class="content-section bg-light" id="about">
-      <div class="container text-center">
-        <div class="row">
-          <div class="col-lg-10 mx-auto">
-            <h2>Create an Event</h2>
-            <form class="new-event-form" method="POST" action="/event">
-              <div class="form-group">
-                <input
-                  placeholder="Title"
-                  id="title"
-                  name="title"
-                  type="text"
-                  required="required"
-                  class="form-control"
-                />
-              </div>
-              <div class="form-group">
-                <textarea
-                  placeholder="Description"
-                  id="description"
-                  name="description"
-                  cols="40"
-                  rows="5"
-                  required="required"
-                  class="form-control"
-                ></textarea>
-              </div>
-              <div class="form-group">
-                <div class="custom-control custom-radio custom-control-inline">
-                  <input
-                    type="radio"
-                    id="public"
-                    value="public"
-                    name="eventType"
-                    class="custom-control-input"
-                  />
-                  <label class="custom-control-label" for="public">Public</label>
-                </div>
-                <div class="custom-control custom-radio custom-control-inline">
-                  <input
-                    type="radio"
-                    id="private"
-                    value="private"
-                    name="eventType"
-                    class="custom-control-input"
-                  />
-                  <label class="custom-control-label" for="private">Private</label>
-                </div>
-              </div>
-            
-              <div class="form-group">
-                <input
-                  name="street"
-                  placeholder="Address"
-                  type="text"
-                  class="form-control"
-                  id="inputAddress"
-                  placeholder="1234 Main St"
-                />
-              </div>
-            
-              <div class="form-row">
-                <div class="form-group col-md-8 address-input">
-                  <input
-                    name="city"
-                    placeholder="City"
-                    type="text"
-                    class="form-control"
-                    id="inputCity"
-                  />
-                </div>
-                <div class="form-group col-md-4 address-input">
-                  <input
-                    name="zip"
-                    placeholder="Zip"
-                    type="text"
-                    class="form-control"
-                    id="inputZip"
-                  />
-                </div>
-              </div>
-            
-              <div class="form-group">
-                <label for="date">Date</label>
-                <input id="date" name="date" type="date" class="form-control" required/>
-              </div>
-            
-              <div class="form-group">
-                <textarea
-                  placeholder="Looking for"
-                  id="lookingFor"
-                  name="lookingFor"
-                  cols="40"
-                  rows="3"
-                  class="form-control"
-                ></textarea>
-              </div>
-            
-              <div class="form-group">
-                <button name="submit" type="submit" class="btn btn-primary">Create</button>
-              </div>
-            </form>
+<!-- Login -->
+<section class="content-section bg-light" id="about">
+  <div class="container text-center">
+    <div class="row">
+      <div class="col-lg-10 mx-auto">
+        <h2>Create an Event</h2>
+        <form class="new-event-form" method="POST" action="/event">
+          <div class="form-group">
+            <input
+              placeholder="Title"
+              id="title"
+              name="title"
+              type="text"
+              required="required"
+              class="form-control"
+            />
+          </div>
+          <div class="form-group">
+            <textarea
+              placeholder="Description"
+              id="description"
+              name="description"
+              cols="40"
+              rows="5"
+              required="required"
+              class="form-control"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <div class="custom-control custom-radio custom-control-inline">
+              <input
+                type="radio"
+                id="public"
+                value="public"
+                name="eventType"
+                class="custom-control-input"
+              />
+              <label class="custom-control-label" for="public">Public</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+              <input
+                type="radio"
+                id="private"
+                value="private"
+                name="eventType"
+                class="custom-control-input"
+              />
+              <label class="custom-control-label" for="private">Private</label>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- Footer -->
-    <%- include('partials/footer'); -%>
+          <div class="form-group">
+            <input
+              name="street"
+              placeholder="Address"
+              type="text"
+              class="form-control"
+              id="inputAddress"
+              placeholder="1234 Main St"
+            />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-8 address-input">
+              <input
+                name="city"
+                placeholder="City"
+                type="text"
+                class="form-control"
+                id="inputCity"
+              />
+            </div>
+            <div class="form-group col-md-4 address-input">
+              <input
+                name="zip"
+                placeholder="Zip"
+                type="text"
+                class="form-control"
+                id="inputZip"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="date">Date</label>
+            <input
+              id="date"
+              name="date"
+              type="date"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <textarea
+              placeholder="Looking for"
+              id="lookingFor"
+              name="lookingFor"
+              cols="40"
+              rows="3"
+              class="form-control"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <button name="submit" type="submit" class="btn btn-primary">
+              Create
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<%- include('partials/footer'); -%>

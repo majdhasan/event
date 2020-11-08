@@ -12,6 +12,15 @@ const userSchema = new Schema({
   password: String,
   firstname: String,
   lastname: String,
+  conversations: [
+    [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Conversation',
+
+      },
+    ],
+  ],
   type: {
     type: String,
     enum: ['costumer', 'supplier'],
@@ -20,7 +29,7 @@ const userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Company',
   },
-  address:{
+  address: {
     type: Schema.Types.ObjectId,
     ref: 'Address',
   },
@@ -28,7 +37,7 @@ const userSchema = new Schema({
     type: String,
     enum: ['male', 'female', 'diverse'],
   },
-  pendingInvites: Number
+  pendingInvites: Number,
 });
 
 userSchema.plugin(passportLocalMongoose);
