@@ -14,7 +14,32 @@ const cors = require('cors');
 
 // Initialized Express App
 const app = express();
+
+// Initilize HTTP Server for the socket io chat
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
+
+io.on('connection', (socket) => {
+  console.log('new connection to server' + socket.id);
+  socket.emit('yourId', socket.id)
+
+  socket.on('add', (msg) => {
+    console.log(msg);
+    io.emit('message', msg);
+  });
+
+  socket.on("disconnect", () => {
+    // activeUsers.delete(socket.userId);
+    // io.emit("user disconnected", socket.userId);
+    console.log('a user left, id is: ' + socket.id);
+
+  });
+});
+
 app.use(cors());
+
+// Parse incoming messages
+
 app.use(
   bodyParser.urlencoded({
     extended: true,
@@ -22,6 +47,8 @@ app.use(
 );
 
 app.use(bodyParser.json());
+
+// Initilaize Passport sessions
 
 app.use(
   session({
@@ -37,8 +64,10 @@ app.use(passport.session());
 // Connect to DB
 dbConnection;
 
+// Router the requests of the API
 app.use('/api/v1', apiRouter);
 
+// Route the requests to the local views (EJS)
 app.use(router);
 
 // Handle incoming request
@@ -46,6 +75,7 @@ app.use(router);
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
-app.listen(port, () => {
+// Listen on the port (default 3000)
+http.listen(port, () => {
   console.log('App started on port ' + port);
 });
