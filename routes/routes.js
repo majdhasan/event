@@ -9,7 +9,6 @@ const Founder = require('../model/Founder');
 const Invite = require('../model/Invite');
 const { findByIdAndUpdate } = require('../model/Event');
 const Conversation = require('../model/Conversation');
-const Message = require('../model/Message');
 
 const router = express.Router();
 
@@ -369,9 +368,6 @@ router.route('/chat').get((req, res) => {
             if (err) {
               reject(err);
             } else {
-
-
-
               conversationList.push(conv);
               conv.participants.forEach((user) => {
                 if (String(user) === String(req.user._id)) {
@@ -448,7 +444,7 @@ router.route('/chat/new/:id').get((req, res) => {
     res
       .status(401)
       .send(
-        'You not to create an account or log in to be able to send messages'
+        'You need to create an account or log in to be able to send messages'
       );
   }
 });

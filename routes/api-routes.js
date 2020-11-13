@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+
 const { render } = require('ejs');
 const passport = require('passport');
 const Event = require('../model/Event');
@@ -20,7 +20,7 @@ const verifyToken = (req, res, next) => {
   const bearerHeader = req.headers['authorization'];
   if (typeof bearerHeader !== 'undefined') {
     const [bearer, token] = bearerHeader.split(' ');
-    console.log('a request with following token has just arrived' + token);
+
     jwt.verify(token, process.env.PRIVATEKEY, (err, decoded) => {
       if (err) {
         res.sendStatus(403);
@@ -37,7 +37,7 @@ const verifyToken = (req, res, next) => {
 
 // ------------------------------------ Routes ----------------------------------------
 
-// ------------------------------------ Authentication/Authorization ----------------------------------------
+// ------- Authentication/Authorization ------------------
 
 apiRouter.route('/login').post((req, res) => {
   if (req.body.username && req.body.password) {
@@ -46,18 +46,15 @@ apiRouter.route('/login').post((req, res) => {
       password: req.body.password,
     });
     req.login(user, (err) => {
-      if (err) {
-        console.log(err);
-      } else {
-        passport.authenticate('local')(req, res, () => {
-          jwt.sign({ user: req.user }, process.env.PRIVATEKEY, (err, token) => {
-            if (err) console.log(err);
-            if (token) {
-              res.status(200).json({ token: token, user: req.user });
-            }
-          });
+      if (err) throw err;
+      passport.authenticate('local')(req, res, () => {
+        jwt.sign({ user: req.user }, process.env.PRIVATEKEY, (err, token) => {
+          if (err) console.log(err);
+          if (token) {
+            res.status(200).json({ token: token, user: req.user });
+          }
         });
-      }
+      });
     });
   } else {
     res.sendStatus(404);
@@ -65,7 +62,6 @@ apiRouter.route('/login').post((req, res) => {
 });
 
 apiRouter.route('/signup').post((req, res) => {
-  console.log(req.body);
   User.register(
     {
       username: req.body.username,
@@ -79,11 +75,9 @@ apiRouter.route('/signup').post((req, res) => {
       if (err) {
         console.log(err);
       } else {
-        console.log('new user has been created' + result);
         jwt.sign({ user: result }, process.env.PRIVATEKEY, (err, token) => {
           if (err) console.log(err);
           if (token) {
-            console.log(token);
             res.json({ token });
           }
         });
@@ -92,12 +86,154 @@ apiRouter.route('/signup').post((req, res) => {
   );
 });
 
-// ------------------------------------ Restricted Routes ----------------------------------------
+// ------------------------------------ Restricted Routes ----------------------------------------------------------------
+
+// --------------------- User Info Route -------------------
 
 apiRouter.route('/test').get(verifyToken, (req, res) => {
-  console.log('a new request arrived from' + req.user._id);
   res.json({ user: req.user });
 });
+
+// --------------------- Event Route -------------------
+
+apiRouter
+  .route('/event')
+  .get(verifyToken, (req, res) => {
+    Event.find({ creator: req.user._id }, (err, events) => {
+      if (err) throw err;
+      res.json(events);
+    });
+  })
+  .post(verifyToken, (req, res) => {
+    let newEvent = new Event({
+      title: req.body.title,
+      description: req.body.description,
+      type: req.body.eventType,
+      street: req.body.street,
+      city: req.body.city,
+      zip: req.body.zip,
+      country: req.body.country,
+      creator: req.user._id,
+      date: req.body.date,
+      lookingFor: req.body.lookingFor,
+      comments: [],
+      canAccess: [req.user._id],
+      invites: [],
+    });
+
+    newEvent.save((err, result) => {
+      if (err) throw err;
+      res.sendStatus(200);
+    });
+  })
+  .delete(verifyToken, (req, res) => {
+    const eventId = req.query.id;
+    Event.findById(eventId, (err, result) => {
+      if (err) throw err;
+      if (result.creator == req.user._id) {
+        result.remove({}, (err, response) => {
+          if (err) throw err;
+          res.json(response);
+        });
+      } else {
+        res.sendStatus(403);
+      }
+    });
+  });
+
+// --------------------- Chat Routes -------------------
+apiRouter
+  .route('/chat/:id')
+
+  // Get a conversation
+  // the response is the name of the partner as String and array of the messages
+  .get(verifyToken, (req, res) => {
+    const conversationId = req.params.id;
+    Conversation.findById(conversationId, (err, conv) => {
+      if (err) throw err;
+      const response = { messages: conv.messages };
+      if (conv.members.includes(req.user._id)) {
+        res.json(response);
+      } else {
+        res.sendStatus(403);
+      }
+    });
+  })
+
+  // Create new conversation
+  // Need to send a token and the id of the new partner
+  .post(verifyToken, (req, res) => {
+    const senderId = req.user._id;
+    const recieverId = req.params.id;
+    const senderName = req.user.firstname + ' ' + req.user.lastname;
+
+    let newConversation = new Conversation({
+      members: [senderId, recieverId],
+      messages: [],
+    });
+    newConversation.save((err, newConvSaved) => {
+      if (err) throw err;
+      User.findByIdAndUpdate(
+        recieverId,
+        {
+          $push: {
+            conversations: {
+              conversation: newConvSaved._id,
+              partner: senderName,
+            },
+          },
+        },
+        (err, reciever) => {
+          if (err) throw err;
+          const recieverName = reciever.firstname + ' ' + reciever.lastname;
+          User.findByIdAndUpdate(
+            senderId,
+            {
+              $push: {
+                conversations: {
+                  conversation: newConvSaved._id,
+                  partner: recieverName,
+                },
+              },
+            },
+            (err) => {
+              if (err) throw err;
+              console.log(
+                `created a new conversation between ${senderId} and ${recieverId}`
+              );
+              res.json(newConversation);
+            }
+          );
+        }
+      );
+    });
+  });
+
+apiRouter
+  .route('/message/:id')
+
+  .post(verifyToken, (req, res) => {
+    const senderId = req.user._id;
+    const content = req.body.message;
+    const conversationId = req.params.id;
+
+    Conversation.findById(conversationId, (err, conv) => {
+      if (err) throw err;
+      if (conv.members.includes(senderId)) {
+        const newMessage = {
+          content: content,
+          sender: senderId,
+        };
+        conv.messages.push(newMessage);
+        conv.save((err, conversation) => {
+          if (err) return handleError(err);
+          res.json(conversation);
+        });
+      } else {
+        res.sendStatus(403);
+      }
+    });
+  });
 
 // ------------------------------------ END OF API ----------------------------------------
 module.exports = apiRouter;

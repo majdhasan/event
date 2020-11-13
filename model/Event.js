@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const eventSchema = new Schema({
   title: String,
-  body: String,
+  description: String,
   descriptionForSupplier: String,
   street: String,
   city: String,
@@ -22,7 +22,7 @@ const eventSchema = new Schema({
   ],
   invites: [{ type: Schema.ObjectId, ref: 'Invite' }],
   canAccess: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  type: { type: String, enum: ['public', 'private'] },
+  eventType: { type: String, enum: ['public', 'private'] },
   lookingFor: String,
   guestAmount: Number,
 });

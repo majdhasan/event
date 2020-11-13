@@ -4,6 +4,14 @@ const passportLocalMongoose = require('passport-local-mongoose');
 
 const { Schema } = mongoose;
 
+const userConversations = new Schema({
+  conversation: {
+    type: Schema.Types.ObjectId,
+    ref: 'Conversation',
+  },
+  partner: String,
+});
+
 const userSchema = new Schema({
   username: {
     type: String,
@@ -12,15 +20,7 @@ const userSchema = new Schema({
   password: String,
   firstname: String,
   lastname: String,
-  conversations: [
-    [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Conversation',
-
-      },
-    ],
-  ],
+  conversations: [userConversations],
   type: {
     type: String,
     enum: ['costumer', 'supplier'],

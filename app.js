@@ -11,6 +11,8 @@ const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
 const _ = require('lodash');
 const cors = require('cors');
+const mongoose = require('mongoose');
+const Conversation = require('./model/Conversation');
 
 // Initialized Express App
 const app = express();
@@ -20,20 +22,25 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
 io.on('connection', (socket) => {
-  console.log('new connection to server' + socket.id);
-  socket.emit('yourId', socket.id)
+  socket.on('loadMessages', (conversationId) => {
+    Conversation.findById(conversationId, (err, conversation) => {
+      if (err) throw err;
+      socket.emit('initialMessages', conversation.messages);
+    });
+  });
 
   socket.on('add', (msg) => {
     console.log(msg);
     io.emit('message', msg);
+    Conversation.findById(msg.conversation, (err, conv) => {
+      conv.messages.push(msg);
+      conv.save((err) => {
+        if (err) throw err;
+      });
+    });
   });
 
-  socket.on("disconnect", () => {
-    // activeUsers.delete(socket.userId);
-    // io.emit("user disconnected", socket.userId);
-    console.log('a user left, id is: ' + socket.id);
-
-  });
+  socket.on('disconnect', () => {});
 });
 
 app.use(cors());
@@ -75,7 +82,7 @@ app.use(router);
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
-// Listen on the port (default 3000)
+// Listen on the port (default 4000)
 http.listen(port, () => {
   console.log('App started on port ' + port);
 });
