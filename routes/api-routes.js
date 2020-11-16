@@ -1,13 +1,9 @@
 const express = require('express');
-const mongoose = require('mongoose');
-
-const { render } = require('ejs');
 const passport = require('passport');
 const Event = require('../model/Event');
 const User = require('../model/User');
 const Founder = require('../model/Founder');
 const Invite = require('../model/Invite');
-const { findByIdAndUpdate } = require('../model/Event');
 const Conversation = require('../model/Conversation');
 const Message = require('../model/Message');
 var jwt = require('jsonwebtoken');
@@ -17,6 +13,7 @@ const apiRouter = express.Router();
 // ------------------------------------ Utilities ----------------------------------------
 
 const verifyToken = (req, res, next) => {
+console.log(req.headers['authorization']);
   const bearerHeader = req.headers['authorization'];
   if (typeof bearerHeader !== 'undefined') {
     const [bearer, token] = bearerHeader.split(' ');
@@ -27,13 +24,15 @@ const verifyToken = (req, res, next) => {
       } else {
         req.token = token;
         req.user = decoded.user;
+
         next();
       }
     });
   } else {
+    console.log("i arrived here");
     res.sendStatus(403);
   }
-};
+};  
 
 // ------------------------------------ Routes ----------------------------------------
 
@@ -90,20 +89,30 @@ apiRouter.route('/signup').post((req, res) => {
 
 // --------------------- User Info Route -------------------
 
-apiRouter.route('/test').get(verifyToken, (req, res) => {
+apiRouter.route('/user').get(verifyToken, (req, res) => {
   res.json({ user: req.user });
+});
+
+apiRouter.route('/user/:id').get(verifyToken, (req, res) => {
+  User.findById(req.params.id, (err, result) => {
+    if (err) res.sendStatus(404);
+    res.json(result);
+  });
 });
 
 // --------------------- Event Route -------------------
 
 apiRouter
   .route('/event')
+  // Returns all the event of the user associated with the token.
   .get(verifyToken, (req, res) => {
     Event.find({ creator: req.user._id }, (err, events) => {
       if (err) throw err;
       res.json(events);
     });
   })
+
+  // Creats a new Event and get assigned to the user associated with the token
   .post(verifyToken, (req, res) => {
     let newEvent = new Event({
       title: req.body.title,
@@ -135,6 +144,26 @@ apiRouter
           if (err) throw err;
           res.json(response);
         });
+      } else {
+        res.sendStatus(403);
+      }
+    });
+  });
+
+apiRouter
+  .route('/event/:id')
+
+  // Return if found the Event with the given ID.
+  // a requirment to return the event is that the user (token assocuiated) is in the has access array of the Event
+  .get(verifyToken, (req, res) => {
+
+    const eventId = req.params.id;
+
+    Event.findById(eventId, (err, result) => {
+      if (err) throw err;
+      if (result.canAccess.includes(req.user._id)) {
+        res.json(result);
+       
       } else {
         res.sendStatus(403);
       }
